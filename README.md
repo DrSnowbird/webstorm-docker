@@ -1,62 +1,61 @@
-# Docker Project Template
+# WebStorm IDE in a Docker container
 
-## Purpose
-To provide the common files for building, running a docker project
+[![](https://images.microbadger.com/badges/image/openkbs/WebStorm-docker.svg)](https://microbadger.com/images/openkbs/webstorm-docker "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/version/openkbs/WebStorm-docker.svg)](https://microbadger.com/images/openkbs/webstorm-docker "Get your own version badge on microbadger.com")
 
-## Concepts
-### > Simple command-based Docker environments:
-- Open Source code for all containers:
-For community to extend or improve upon.
-- Hiding the details with one command to run or build:
-As simple as just one command to start a Docker-based applications without fudging and mistakes in launching containers.
+* WebStorm VERSION=2018.1
 
-### > Container-based Development and Big Data Analytic Environments
-- Providing many commonly used "pure docker-based IDEs, Applications, Servers" for software development daily needs.
-- Supporting development (e.g. JDK, Python, ...) and advanced applications/servers (e.g., scala-ide-docker, Netbean-docker, Jupyter, Zeppelin, SparkNotebook, Eclipse-docker, and many other big data analytic, deep learning, machine learning, and semantic knowledge graph applications/servers).
-
-### > Only needs two scripts: "./run.sh" and "./build.sh"
-- "./run.sh" to instantly stand up and "./build/sh" to build containers.
-- For Product usage, please ensure all aspects of security by enhancing source code and setup.
-
-## Resources
-- This project template folder assumes you like to adopt and use simple command-based Docker life-cycle paradigm using containers:
-1. OpenKBS Docker HUB [https://github.com/DrSnowbird/] - for pulling the ready to use public Docker Images.
-2. OpenKBS GIT HUB [https://hub.docker.com/r/openkbs/] - for advanced users like to build and customize to your own flavor using our open source environments.
-
-## How to Use this template?
-1. Copy all the folder's files to your destination, i.e., your new project folder.
-2. Globally replace "docker-WebStorm" for all the files with your new Docker project repo name, e.g., scala-ide-docker.
-3. Modify files below depending upon your use case:
-Dockerfile, docker-compose.yaml, or docker.env (if you need to modify docker environments input file)
-4. Modify "build.sh" and "run.sh" if needed such as create additional host volume mapping.
-5. Then, you are ready to build and run (see below).
+## Requirements
+* Docker 1.13.1+ or latest 17.12.1-ce 
+* An X11 server socket enabled (e.g. xhost+)
 
 ## Build
-- This project provides a simple Dockerfile for the purpose of illustration only. You need to extend/modify the Docker to
-support whatever you want to do.
 ```
 ./build.sh
 ```
 
-## (NEW) Configuration
-New extension to allow users to enter "Volume mapping" and "Port mapping" entries together with "docker.env" file with "#" syntax to avoid docker-compose pick up the entries -- "Rider" configuration!
-Here is the example syntax:
-```
-#### Rider configuration for run.sh ####
-# - Use "#VOLUMES" and "#PORTS" to indicate that the variables for run.sh"
-# - To ignore line, use "##" (double) in the beginning, e.g. "##VOLUMES" and "##PORTS"
-# - To indicate that the variables for run.sh", use only one "#",  e.g. "#VOLUMES" and "#PORTS"
-#VOLUMES_LIST="data workspace"
-##PORTS_LIST="18080:8000 17200:7200"
-```
 ## Run
-- To run the simple example build image; it will pop up X11 to display Firefox docker-based browser.
 ```
 ./run.sh
 ```
 
-## Utility tools
-Scripts under ./bin have several useful bash scripts to jump start what you need.
-1. dockerCE-install.sh: Install docker CE with latest version available.
-2. portainer_resume.sh: Launch portainer to manage all you Docker-based containers.
-3. container-launcher.sh: Launch specific container using "pattern expression".
+## Making plugins persist between sessions
+
+WebStorm configurations are kept on `$HOME/.WebStorm2018.1` inside the container, so if you
+want to keep them around after you close it, you'll need to share it with your
+host.
+
+For example: (Version might be different - use run.sh instead)
+
+```sh
+docker run -ti --rm \
+           -e DISPLAY=$DISPLAY \
+           -v /tmp/.X11-unix:/tmp/.X11-unix \
+           -v $HOME/.WebStorm2018.1:/home/developer/.WebStorm2018.1 \
+           -v `pwd`:/home/developer/workspace \
+           openkbs/WebStorm-docker
+```
+
+## Help! I started the container but I don't see the X11 screen
+
+You might have an issue with the X11 socket permissions since the default user
+used by the base image has an user and group ids set to `1000`, two options:
+* Create your own base image with the appropriate ids or 
+* Or, at the host, run
+```
+`xhost +` 
+```
+try again.
+
+
+## Other docker-based IDE
+* [openkbs/eclipse-oxygen-docker](https://hub.docker.com/r/openkbs/eclipse-oxygen-docker/)
+* [openkbs/netbeans](https://hub.docker.com/r/openkbs/netbeans/)
+* [openkbs/scala-ide-docker](https://hub.docker.com/r/openkbs/scala-ide-docker/)
+* [openkbs/pycharm-docker](https://hub.docker.com/r/openkbs/pycharm-docker/)
+* [openkbs/webstorm-docker](https://hub.docker.com/r/openkbs/webstorm-docker/)
+* [openkbs/intellj-docker](https://hub.docker.com/r/openkbs/intellij-docker/)
+
+## Reference
+* https://download.jetbrains.com/idea
+* https://www.jetbrains.com/webstorm/
