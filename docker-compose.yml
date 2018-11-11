@@ -1,10 +1,11 @@
 version: '3' 
 services:
-  docker-WebStorm:
-    image: openkbs/docker-WebStorm
+  webstorm-docker:
+    image: openkbs/webstorm-docker
     build:
-      context: ./Dockerfile
-    container_name: docker-WebStorm
+      context: .
+      dockerfile: Dockerfile
+    container_name: webstorm-docker
     environment:
       - USER_ID=${USER_ID:-1000}
       - GROUP_ID=${GROUP_ID:-1000}
