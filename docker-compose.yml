@@ -14,5 +14,8 @@ services:
 #    ports:
 #      - 8080:8080
     volumes:
+      - ./WebstormProjects:/home/developer/WebstormProjects
+      - ./.WebstormIC2020.3:/home/developer/.WebstormIC2020.3
+      - ./data:/home/developer/data
       - ./workspace:/home/developer/workspace
-
+      - ./.java:/home/developer/.java
